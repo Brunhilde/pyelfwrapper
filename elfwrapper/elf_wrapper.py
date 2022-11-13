@@ -123,6 +123,7 @@ class ElfAddrObj(ELFFile):
                 self._process_die(die, iter_dies)
 
     def _process_die(self, die, iter_dies):
+        
         if die.tag == "DW_TAG_structure_type":
             self._process_structure_type(die, iter_dies)
         elif die.tag == "DW_TAG_member":
@@ -145,7 +146,7 @@ class ElfAddrObj(ELFFile):
         elif die.tag == "DW_TAG_const_type":
             self.offset_dict[die.offset] = self._attr_to_dict(die)
         elif die.tag == None:
-          pass
+            pass
         elif die.tag == "DW_TAG_volatile_type":
             self.offset_dict[die.offset] = self._attr_to_dict(die)
         elif die.tag == "DW_TAG_enumeration_type":
@@ -240,14 +241,14 @@ class ElfAddrObj(ELFFile):
                   at_type = self.offset_dict[attrs.DW_AT_type];
                   
                   if at_type.tag == "DW_TAG_union_type":
-                    for i in self.union_dict[attrs.DW_AT_type][1:]:
+                      for i in self.union_dict[attrs.DW_AT_type][1:]:
                           i.DW_AT_data_member_location = attrs.DW_AT_data_member_location
                           member_name = i.DW_AT_name
                           self.struct_dict[struct_name][member_name] = i
                   elif at_type.tag == "DW_TAG_structure_type":
-                    i = self.offset_dict[attrs.DW_AT_type];
-                    member_name = i.DW_AT_name
-                    self.struct_dict[struct_name][member_name] = i
+                      i = self.offset_dict[attrs.DW_AT_type];
+                      member_name = i.DW_AT_name
+                      self.struct_dict[struct_name][member_name] = i
             next_die = next(iter_dies)
         self._process_die(next_die, iter_dies)
 
@@ -317,7 +318,7 @@ class ElfAddrObj(ELFFile):
             base_type = self.offset_dict[root_type.DW_AT_type]
             
             if base_type.tag == "DW_TAG_typedef":
-              base_type = self.offset_dict[base_type.DW_AT_type]
+                base_type = self.offset_dict[base_type.DW_AT_type]
             
             if self.DW_AT_NAME in base_type:
                 root_struct_name = base_type.DW_AT_name
@@ -408,9 +409,9 @@ class ElfAddrObj(ELFFile):
                         off = re.findall(
                             self._re_pattern, root_struct[mem_base].DW_AT_data_member_location)
                         if len(off) == 0:
-                          off = root_struct[mem_base].DW_AT_data_member_location
+                            off = root_struct[mem_base].DW_AT_data_member_location
                         else:
-                          off = off[0]
+                            off = off[0]
                         membaseoffset = int(off)
                         root_type = self.offset_dict[root_struct[mem_base].DW_AT_type]
                         self._logger.info(
